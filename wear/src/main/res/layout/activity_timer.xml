@@ -6,10 +6,11 @@
     android:layout_height="match_parent"
     android:background="@color/dark_grey"
     android:padding="@dimen/box_inset_layout_padding"
-    tools:context=".MainActivity"
+    tools:context=".TimerActivity"
     tools:deviceIds="wear">
 
-    <FrameLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/inner_frame_layout_padding"
@@ -21,5 +22,18 @@
             android:layout_height="wrap_content"
             android:text="@string/hello_world" />
 
-    </FrameLayout>
+        <Button
+            android:id="@+id/btn_pause_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <Button
+            android:id="@+id/btn_resume_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            />
+
+    </LinearLayout>
 </androidx.wear.widget.BoxInsetLayout>

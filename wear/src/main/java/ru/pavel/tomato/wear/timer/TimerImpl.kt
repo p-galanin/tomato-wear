@@ -1,22 +1,26 @@
-package ru.pavel.tomato.wear
+package ru.pavel.tomato.wear.timer
 
 import android.os.CountDownTimer
 import android.util.Log
 import java.lang.IllegalStateException
-import java.util.concurrent.Executors
+import kotlin.math.min
 
-object TimerHandlerImpl : TimerHandler {
+object TimerImpl : Timer {
 
     private const val TAG = "DEBUG-TIMER"
 
     @Volatile
     private var timer: CountDownTimer? = null
+
+    @Volatile
+    private var currentLeftTime: Int = 0
+
     private val listeners =
-        LinkedHashSet<TimerHandler.TimerListener>() // todo multithread problems?
+        LinkedHashSet<TimerListener>() // todo multithread problems?
 
-    override fun startTimer(durationSeconds: Int, listener: TimerHandler.TimerListener?) {
+    override fun start(durationSeconds: Int) {
 
-        if (isTimerActive()) {
+        if (isActive()) {
             throw IllegalStateException("Active timer exists")
         }
 
@@ -24,9 +28,11 @@ object TimerHandlerImpl : TimerHandler {
 
             override fun onTick(millisUntilFinished: Long) {
                 Log.d(TAG, "onTick $millisUntilFinished")
+                val currentTime = (millisUntilFinished / 1000).toInt() + 1
                 listeners.forEach {
-                    it.onEverySecond((millisUntilFinished / 1000).toInt())
+                    it.onEverySecond(currentTime)
                 }
+                currentLeftTime = currentTime
             }
 
             override fun onFinish() {
@@ -42,46 +48,38 @@ object TimerHandlerImpl : TimerHandler {
         timer = newTimer.apply {
             start()
         }
-
-        listener?.let {
-            listeners.add(it)
-        }
     }
 
-    override fun stopTimer() {
-        if (isTimerActive()) {
+    override fun stop() {
+        if (isActive()) {
             timer!!.cancel()
             listeners.forEach {
                 it.onStop()
             }
             timer = null
+            currentLeftTime = 0
         }
     }
 
-    override fun startListening(timerListener: TimerHandler.TimerListener) {
+    override fun startListening(timerListener: TimerListener) {
         listeners.add(timerListener)
     }
 
-    override fun stopListening(timerListener: TimerHandler.TimerListener) {
+    override fun stopListening(timerListener: TimerListener) {
         listeners.remove(timerListener)
     }
 
-    override fun isTimerActive(): Boolean {
+    override fun isActive(): Boolean {
         return timer != null
     }
 
-//
-//    private fun createTimer(): CountDownTimer {
-//        return object : CountDownTimer(60 * 5000, 1000) {
-//
-//            override fun onFinish() {
-//                createTimer().start()
-//            }
-//
-//            override fun onTick(millisUntilFinished: Long) {
-//                test_text.text = (millisUntilFinished / 1000).toString()
-//            }
-//        }
-//
-//    }
+    override fun pause() {
+        timer!!.cancel()
+        timer = null
+    }
+
+    override fun resume() {
+        start(min(currentLeftTime, 1))
+    }
+
 }
