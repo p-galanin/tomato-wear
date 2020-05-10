@@ -5,10 +5,11 @@ interface Timer {
     fun start(durationSeconds: Int)
     fun pause()
     fun resume()
-    fun stop()
+    fun cancel()
     fun startListening(timerListener: TimerListener)
     fun stopListening(timerListener: TimerListener)
     fun isActive(): Boolean
+    fun isPaused(): Boolean
 
     companion object {
         fun get() = TimerImpl
@@ -17,6 +18,6 @@ interface Timer {
 
 interface TimerListener {
     fun onEverySecond(secondsLeft: Int) {}
-    fun onStop() {}
+    fun onCancel() {}
     fun onFinish() {}
 }

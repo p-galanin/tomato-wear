@@ -22,7 +22,9 @@ class TimerActivity : WearableActivity(), TimerView {
             onStart(intent.getIntExtra(TIME_IN_SECONDS, 0))
         }
 
-        // todo start/resume buttons listeners
+        btn_cancel_timer.setOnClickListener { timerPresenter.onCancelTimer() }
+        btn_pause_timer.setOnClickListener { timerPresenter.onPauseTimer() }
+        btn_resume_timer.setOnClickListener { timerPresenter.onResumeTimer() }
     }
 
     override fun onDestroy() {
@@ -37,7 +39,7 @@ class TimerActivity : WearableActivity(), TimerView {
     }
 
     override fun signalOnComplete() {
-        test_text.text = "done"
+        test_text.text = "done" // todo
     }
 
     override fun setPauseButtonVisibility(isVisible: Boolean) {

@@ -2,12 +2,11 @@ package ru.pavel.tomato.wear.timer
 
 import android.os.CountDownTimer
 import android.util.Log
-import java.lang.IllegalStateException
-import kotlin.math.min
+import kotlin.math.max
 
 object TimerImpl : Timer {
 
-    private const val TAG = "DEBUG-TIMER"
+    private const val TAG = "D-TIMER"
 
     @Volatile
     private var timer: CountDownTimer? = null
@@ -15,10 +14,10 @@ object TimerImpl : Timer {
     @Volatile
     private var currentLeftTime: Int = 0
 
-    private val listeners =
-        LinkedHashSet<TimerListener>() // todo multithread problems?
+    private val listeners = LinkedHashSet<TimerListener>() // todo multithread problems?
 
     override fun start(durationSeconds: Int) {
+        Log.d(TAG, "start")
 
         if (isActive()) {
             throw IllegalStateException("Active timer exists")
@@ -42,7 +41,6 @@ object TimerImpl : Timer {
                 }
                 timer = null
             }
-
         }
 
         timer = newTimer.apply {
@@ -50,11 +48,12 @@ object TimerImpl : Timer {
         }
     }
 
-    override fun stop() {
+    override fun cancel() {
+        Log.d(TAG, "cancel")
         if (isActive()) {
             timer!!.cancel()
             listeners.forEach {
-                it.onStop()
+                it.onCancel()
             }
             timer = null
             currentLeftTime = 0
@@ -69,17 +68,18 @@ object TimerImpl : Timer {
         listeners.remove(timerListener)
     }
 
-    override fun isActive(): Boolean {
-        return timer != null
-    }
+    override fun isActive() = timer != null
+
+    override fun isPaused() = timer == null && currentLeftTime > 0
 
     override fun pause() {
-        timer!!.cancel()
+        Log.d(TAG, "pause")
+        timer?.cancel()
         timer = null
     }
 
     override fun resume() {
-        start(min(currentLeftTime, 1))
+        Log.d(TAG, "resume")
+        start(max(currentLeftTime, 1))
     }
-
 }

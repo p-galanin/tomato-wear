@@ -1,5 +1,6 @@
 package ru.pavel.tomato.wear
 
+import android.util.Log
 import ru.pavel.tomato.wear.timer.TimerListener
 
 interface TimerPresenter {
@@ -29,13 +30,15 @@ class TimerPresenterImpl(private val timerView: TimerView) : TimerPresenter{
     }
 
     override fun onPauseTimer() {
-        timerInteractor.pause()
+        Log.d("D-TIMER", "presenter: pause")
         setButtonsVisibility(isPaused = true)
+        timerInteractor.pause()
     }
 
     override fun onResumeTimer() {
-        timerInteractor.resume()
+        Log.d("D-TIMER", "presenter: resume")
         setButtonsVisibility(isPaused = false)
+        timerInteractor.resume()
     }
 
     override fun onDestroy() {
@@ -52,8 +55,8 @@ class TimerPresenterImpl(private val timerView: TimerView) : TimerPresenter{
     }
 
     private fun setButtonsVisibility(isPaused: Boolean) {
-        timerView.setPauseButtonVisibility(isPaused)
-        timerView.setResumeButtonVisibility(!isPaused)
+        timerView.setPauseButtonVisibility(!isPaused)
+        timerView.setResumeButtonVisibility(isPaused)
     }
 
     private class BasicTimerListener(private val timerPresenter: TimerPresenter)

@@ -9,7 +9,7 @@
     tools:context=".TimerActivity"
     tools:deviceIds="wear">
 
-    <LinearLayout
+    <FrameLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,6 +26,8 @@
             android:id="@+id/btn_pause_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="pause"
+            android:layout_marginTop="50dp"
             />
 
         <Button
@@ -33,7 +35,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="invisible"
+            android:text="resume"
+            android:layout_marginTop="50dp"
             />
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/btn_cancel_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="cancel"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="100dp"
+            />
+
+    </FrameLayout>
 </androidx.wear.widget.BoxInsetLayout>

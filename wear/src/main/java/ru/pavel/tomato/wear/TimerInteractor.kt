@@ -1,5 +1,6 @@
 package ru.pavel.tomato.wear
 
+import android.util.Log
 import ru.pavel.tomato.wear.timer.Timer
 import ru.pavel.tomato.wear.timer.TimerListener
 
@@ -36,17 +37,25 @@ class TimerInteractorImpl : TimerInteractor {
     }
 
     override fun resume() {
-        timer.resume()
+        if (timer.isPaused()) {
+            timer.resume()
+        } else {
+            Log.w(TAG, "Attempt to resume not paused timer")
+        }
     }
 
     override fun cancel() {
-        timer.stop()
+        timer.cancel()
     }
 
     override fun stopListening(timerListener: TimerListener) {
         timer.stopListening(timerListener)
     }
 
+    companion object {
+        private const val TAG = "D-TIMER"
+
+    }
 }
 
 const val TOMATO_IN_SECONDS = (25 * 60).toString()
