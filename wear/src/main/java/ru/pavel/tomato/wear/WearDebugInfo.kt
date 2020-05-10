@@ -10,9 +10,12 @@ package ru.pavel.tomato.wear
 
 
 /*
- Tasks and problems:
+ TODO Tasks and problems:
  - not showing 1 on real device
+ - activities in stack
+ - format time
  - vibro on done
- - ui
+ - precious ui
+ - information when hided?
  - stats?
  */
