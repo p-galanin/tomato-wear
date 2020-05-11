@@ -17,7 +17,7 @@ interface Timer {
 }
 
 interface TimerListener {
-    fun onEverySecond(secondsLeft: Int) {}
+    fun onEveryTick(timeLeft: Int) {}
     fun onCancel() {}
     fun onFinish() {}
 }

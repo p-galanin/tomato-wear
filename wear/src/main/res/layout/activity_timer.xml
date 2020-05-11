@@ -17,17 +17,19 @@
         app:boxedEdges="all">
 
         <TextView
-            android:id="@+id/test_text"
+            android:id="@+id/tv_time_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/hello_world" />
+            android:textSize="48dp"
+            />
 
         <Button
             android:id="@+id/btn_pause_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="pause"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="100dp"
+            android:textSize="10dp"
             />
 
         <Button
@@ -36,7 +38,8 @@
             android:layout_height="wrap_content"
             android:visibility="invisible"
             android:text="resume"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="100dp"
+            android:textSize="10dp"
             />
 
         <Button
@@ -44,8 +47,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="cancel"
-            android:layout_marginTop="50dp"
-            android:layout_marginLeft="100dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginStart="100dp"
+            android:textSize="10dp"
             />
 
     </FrameLayout>

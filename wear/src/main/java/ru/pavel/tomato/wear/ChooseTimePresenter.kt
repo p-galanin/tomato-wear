@@ -13,11 +13,13 @@ class ChooseTimePresenterImpl(private val chooseTimeView: ChooseTimeView) : Choo
     }
 
     override fun onTimeChosen(chosenTime: String) {
-        chooseTimeView.goToTimerView(chosenTime.toInt()) // todo convert to seconds
+        chooseTimeView.goToTimerView(chosenTime.toInt() * SECONDS_IN_MINUTE)
     }
 
     override fun onTomatoChosen() {
-        onTimeChosen(TOMATO_IN_SECONDS)
+        onTimeChosen(TOMATO_IN_MINUTES)
     }
-
 }
+
+private const val TOMATO_IN_MINUTES = 25.toString()
+private const val SECONDS_IN_MINUTE = 60

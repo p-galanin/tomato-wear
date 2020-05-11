@@ -47,8 +47,7 @@ class ChooseTimeActivity : WearableActivity(), ChooseTimeView {
 
     companion object {
         fun start(context: Context) {
-            val intent = Intent(context, ChooseTimeActivity::class.java)
-            context.startActivity(intent)
+            context.startActivity(createIntent(ChooseTimeActivity::class.java, context, false))
         }
     }
 }

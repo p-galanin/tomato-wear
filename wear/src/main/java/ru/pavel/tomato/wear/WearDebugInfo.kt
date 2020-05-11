@@ -6,15 +6,14 @@ package ru.pavel.tomato.wear
 // adb forward tcp:4444 localabstract:/adbhub
 // adb connect localhost:4444
 // verify on watches
+// if no message: adb forward --remove tcp:4444
 // enjoy
 
 
 /*
  TODO Tasks and problems:
- - not showing 1 on real device
- - activities in stack
- - format time
- - vibro on done
+ - main navigation activity?
+ - show millis?
  - precious ui
  - information when hided?
  - stats?

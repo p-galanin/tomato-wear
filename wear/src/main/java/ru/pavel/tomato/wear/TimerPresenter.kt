@@ -1,6 +1,6 @@
 package ru.pavel.tomato.wear
 
-import android.util.Log
+import android.text.format.DateFormat
 import ru.pavel.tomato.wear.timer.TimerListener
 
 interface TimerPresenter {
@@ -8,7 +8,7 @@ interface TimerPresenter {
     fun onPauseTimer()
     fun onResumeTimer()
     fun onCancelTimer()
-    fun onEveryTimerSecond(secondsLeft: Int)
+    fun onEveryTimerTick(secondsLeft: Int)
     fun onDestroy()
     fun onTimerFinish()
 }
@@ -19,24 +19,22 @@ class TimerPresenterImpl(private val timerView: TimerView) : TimerPresenter{
     private val timerListener = BasicTimerListener(this)
 
     override fun onStart(timeInSeconds: Int) {
-        timerInteractor.startOrJoin(timeInSeconds, timerListener)
+        timerInteractor.startOrResume(timeInSeconds, timerListener)
         timerView.setPauseButtonVisibility(isVisible = true)
         timerView.setResumeButtonVisibility(isVisible = false)
     }
 
     override fun onCancelTimer() {
         timerInteractor.cancel()
-        timerView.goToChooseTimeView()
+        timerView.destroy()
     }
 
     override fun onPauseTimer() {
-        Log.d("D-TIMER", "presenter: pause")
         setButtonsVisibility(isPaused = true)
         timerInteractor.pause()
     }
 
     override fun onResumeTimer() {
-        Log.d("D-TIMER", "presenter: resume")
         setButtonsVisibility(isPaused = false)
         timerInteractor.resume()
     }
@@ -45,13 +43,18 @@ class TimerPresenterImpl(private val timerView: TimerView) : TimerPresenter{
         timerInteractor.stopListening(timerListener)
     }
 
-    override fun onEveryTimerSecond(secondsLeft: Int) {
-        timerView.setTimerText(secondsLeft.toString())
+    override fun onEveryTimerTick(secondsLeft: Int) {
+        timerView.setTimerText(getTimeFormatted(secondsLeft))
     }
 
+    private fun getTimeFormatted(secondsLeft: Int) =
+        DateFormat.format("mm:ss", secondsLeft * 1000L).toString()
+
     override fun onTimerFinish() {
-        timerView.signalOnComplete()
-        timerView.goToChooseTimeView()
+        timerView.apply {
+            signalOnComplete()
+            destroy()
+        }
     }
 
     private fun setButtonsVisibility(isPaused: Boolean) {
@@ -62,8 +65,8 @@ class TimerPresenterImpl(private val timerView: TimerView) : TimerPresenter{
     private class BasicTimerListener(private val timerPresenter: TimerPresenter)
         : TimerListener {
 
-        override fun onEverySecond(secondsLeft: Int) {
-            timerPresenter.onEveryTimerSecond(secondsLeft)
+        override fun onEveryTick(timeLeft: Int) {
+            timerPresenter.onEveryTimerTick(timeLeft)
         }
 
         override fun onFinish() {

@@ -1,11 +1,11 @@
 package ru.pavel.tomato.wear
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.os.Vibrator
 import android.support.wearable.activity.WearableActivity
-import android.view.View
 import kotlinx.android.synthetic.main.activity_timer.*
+
 
 class TimerActivity : WearableActivity(), TimerView {
 
@@ -34,32 +34,27 @@ class TimerActivity : WearableActivity(), TimerView {
 
     override fun setTimerText(text: String) {
         runOnUiThread {
-            test_text.text = text
+            tv_time_left.text = text
         }
     }
 
     override fun signalOnComplete() {
-        test_text.text = "done" // todo
+        val vibrator =
+            getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        val vibrationPattern = longArrayOf(0, 500, 50, 300)
+        vibrator.vibrate(vibrationPattern, -1)
     }
 
     override fun setPauseButtonVisibility(isVisible: Boolean) {
-        btn_pause_timer.visibility = if (isVisible) {
-            View.VISIBLE
-        } else {
-            View.INVISIBLE
-        }
+        btn_pause_timer.visibility = setVisibility(isVisible)
     }
 
     override fun setResumeButtonVisibility(isVisible: Boolean) {
-        btn_resume_timer.visibility = if (isVisible) {
-            View.VISIBLE
-        } else {
-            View.INVISIBLE
-        }
+        btn_resume_timer.visibility = setVisibility(isVisible)
     }
 
-    override fun goToChooseTimeView() {
-        ChooseTimeActivity.start(this)
+    override fun destroy() {
+        finish()
     }
 
     companion object {
@@ -67,7 +62,7 @@ class TimerActivity : WearableActivity(), TimerView {
         private const val TIME_IN_SECONDS = "time_in_seconds"
 
         fun start(context: Context, timeInSeconds: Int) {
-            val intent = Intent(context, TimerActivity::class.java).apply {
+            val intent = createIntent(TimerActivity::class.java, context, false).apply {
                 putExtra(TIME_IN_SECONDS, timeInSeconds)
             }
             context.startActivity(intent)

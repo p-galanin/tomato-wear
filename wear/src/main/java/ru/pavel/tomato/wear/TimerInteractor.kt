@@ -5,7 +5,7 @@ import ru.pavel.tomato.wear.timer.Timer
 import ru.pavel.tomato.wear.timer.TimerListener
 
 interface TimerInteractor {
-    fun startOrJoin(timeInSeconds: Int, timerListener: TimerListener)
+    fun startOrResume(timeInSeconds: Int, timerListener: TimerListener)
     fun pause()
     fun resume()
     fun cancel()
@@ -20,12 +20,15 @@ class TimerInteractorImpl : TimerInteractor {
 
     private val timer = Timer.get()
 
-    override fun startOrJoin(
+    override fun startOrResume(
         timeInSeconds: Int,
         timerListener: TimerListener
     ) {
 
-        if (!timer.isActive()) {
+        // TODO rewrite (navigation activity?)
+        if (timer.isPaused()) {
+            timer.resume()
+        } else if (!timer.isActive()) {
             timer.start(timeInSeconds)
         }
 
@@ -57,5 +60,3 @@ class TimerInteractorImpl : TimerInteractor {
 
     }
 }
-
-const val TOMATO_IN_SECONDS = (25 * 60).toString()

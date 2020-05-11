@@ -7,6 +7,7 @@ import kotlin.math.max
 object TimerImpl : Timer {
 
     private const val TAG = "D-TIMER"
+    private const val TICK_FREQUENCY_MLS = 100L
 
     @Volatile
     private var timer: CountDownTimer? = null
@@ -23,13 +24,13 @@ object TimerImpl : Timer {
             throw IllegalStateException("Active timer exists")
         }
 
-        val newTimer = object : CountDownTimer(durationSeconds * 1000L, 1000) {
+        val newTimer = object : CountDownTimer(durationSeconds * 1000L, TICK_FREQUENCY_MLS) {
 
             override fun onTick(millisUntilFinished: Long) {
                 Log.d(TAG, "onTick $millisUntilFinished")
-                val currentTime = (millisUntilFinished / 1000).toInt() + 1
+                val currentTime = (millisUntilFinished / 1000L).toInt() + 1
                 listeners.forEach {
-                    it.onEverySecond(currentTime)
+                    it.onEveryTick(currentTime)
                 }
                 currentLeftTime = currentTime
             }
