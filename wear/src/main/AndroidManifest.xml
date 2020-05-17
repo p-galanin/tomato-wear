@@ -3,7 +3,7 @@
     package="ru.pavel.tomato.wear">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <uses-feature android:name="android.hardware.type.watch" />
 
@@ -13,13 +13,16 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.DeviceDefault">
-        <activity android:name=".ChooseTimeActivity">
+
+        <activity android:name=".NavigationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ChooseTimeActivity"/>
+        <activity android:name=".TimerActivity" android:label="@string/app_name"/>
 
         <uses-library
             android:name="com.google.android.wearable"
@@ -32,10 +35,6 @@
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
 
-        <activity
-            android:name=".TimerActivity"
-            android:label="@string/app_name">
-        </activity>
     </application>
 
 </manifest>

@@ -53,7 +53,8 @@ class TimerActivity : WearableActivity(), TimerView {
         btn_resume_timer.visibility = setVisibility(isVisible)
     }
 
-    override fun destroy() {
+    override fun goToNavigationView() {
+        NavigationActivity.start(this)
         finish()
     }
 
@@ -61,7 +62,7 @@ class TimerActivity : WearableActivity(), TimerView {
 
         private const val TIME_IN_SECONDS = "time_in_seconds"
 
-        fun start(context: Context, timeInSeconds: Int) {
+        fun start(context: Context, timeInSeconds: Int = 0) {
             val intent = createIntent(TimerActivity::class.java, context, false).apply {
                 putExtra(TIME_IN_SECONDS, timeInSeconds)
             }

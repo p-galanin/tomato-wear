@@ -24,12 +24,12 @@ class TimerInteractorImpl : TimerInteractor {
         timeInSeconds: Int,
         timerListener: TimerListener
     ) {
-
-        // TODO rewrite (navigation activity?)
-        if (timer.isPaused()) {
-            timer.resume()
-        } else if (!timer.isActive()) {
-            timer.start(timeInSeconds)
+        if (!timer.isActive()) {
+            if (timeInSeconds > 0) {
+                timer.start(timeInSeconds)
+            } else {
+                Log.w(TAG, "Attempt to start timer with time: $timeInSeconds")
+            }
         }
 
         timer.startListening(timerListener)
@@ -57,6 +57,5 @@ class TimerInteractorImpl : TimerInteractor {
 
     companion object {
         private const val TAG = "D-TIMER"
-
     }
 }

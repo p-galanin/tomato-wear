@@ -26,7 +26,7 @@ class TimerPresenterImpl(private val timerView: TimerView) : TimerPresenter{
 
     override fun onCancelTimer() {
         timerInteractor.cancel()
-        timerView.destroy()
+        timerView.goToNavigationView()
     }
 
     override fun onPauseTimer() {
@@ -53,7 +53,7 @@ class TimerPresenterImpl(private val timerView: TimerView) : TimerPresenter{
     override fun onTimerFinish() {
         timerView.apply {
             signalOnComplete()
-            destroy()
+            goToNavigationView()
         }
     }
 

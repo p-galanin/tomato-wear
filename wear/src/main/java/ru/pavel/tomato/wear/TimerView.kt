@@ -5,5 +5,5 @@ interface TimerView {
     fun signalOnComplete()
     fun setPauseButtonVisibility(isVisible: Boolean)
     fun setResumeButtonVisibility(isVisible: Boolean)
-    fun destroy()
+    fun goToNavigationView()
 }

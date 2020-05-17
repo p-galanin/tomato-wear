@@ -12,9 +12,9 @@ package ru.pavel.tomato.wear
 
 /*
  TODO Tasks and problems:
- - main navigation activity?
+ - navigation to paused
  - show millis?
  - precious ui
- - information when hided?
+ - information when hidden?
  - stats?
  */

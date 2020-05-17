@@ -23,3 +23,4 @@ class ChooseTimePresenterImpl(private val chooseTimeView: ChooseTimeView) : Choo
 
 private const val TOMATO_IN_MINUTES = 25.toString()
 private const val SECONDS_IN_MINUTE = 60
+//private const val SECONDS_IN_MINUTE = 1 // todo

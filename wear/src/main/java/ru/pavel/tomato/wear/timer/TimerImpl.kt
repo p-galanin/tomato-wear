@@ -10,12 +10,12 @@ object TimerImpl : Timer {
     private const val TICK_FREQUENCY_MLS = 100L
 
     @Volatile
-    private var timer: CountDownTimer? = null
-
-    @Volatile
     private var currentLeftTime: Int = 0
 
-    private val listeners = LinkedHashSet<TimerListener>() // todo multithread problems?
+    @Volatile
+    private var state: TimerState = TimerState.Idle
+
+    private val listeners = LinkedHashSet<TimerListener>()
 
     override fun start(durationSeconds: Int) {
         Log.d(TAG, "start")
@@ -40,24 +40,24 @@ object TimerImpl : Timer {
                 listeners.forEach {
                     it.onFinish()
                 }
-                timer = null
+                state = TimerState.Idle
             }
         }
 
-        timer = newTimer.apply {
+        state = TimerState.Active(newTimer.apply {
             start()
-        }
+        })
     }
 
     override fun cancel() {
         Log.d(TAG, "cancel")
-        if (isActive()) {
-            timer!!.cancel()
+        val currentState = state
+        if (currentState is TimerState.Active) {
+            currentState.timer.cancel()
             listeners.forEach {
                 it.onCancel()
             }
-            timer = null
-            currentLeftTime = 0
+            state = TimerState.Idle
         }
     }
 
@@ -69,14 +69,19 @@ object TimerImpl : Timer {
         listeners.remove(timerListener)
     }
 
-    override fun isActive() = timer != null
+    override fun isActive() = state is TimerState.Active
 
-    override fun isPaused() = timer == null && currentLeftTime > 0
+    override fun isPaused() = state is TimerState.Paused
 
     override fun pause() {
         Log.d(TAG, "pause")
-        timer?.cancel()
-        timer = null
+        val currentState = state
+        if (currentState is TimerState.Active) {
+            state = TimerState.Paused(currentLeftTime)
+            currentState.timer.cancel()
+        } else {
+            Log.w(TAG,"Pause called not from active state")
+        }
     }
 
     override fun resume() {
