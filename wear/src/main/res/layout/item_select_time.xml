@@ -3,12 +3,13 @@
 <!--    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"-->
 <!--    android:layout_height="match_parent">-->
 
-<TextView android:id="@+id/item_time_to_select"
+<Button android:id="@+id/item_time_to_select"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="text"
-    android:textSize="32dp"
-    android:layout_margin="8dp"
+    android:textSize="24sp"
+    android:padding="4dp"
+    android:background="#00796B"
     xmlns:android="http://schemas.android.com/apk/res/android" />
 
     <!--</LinearLayout>-->

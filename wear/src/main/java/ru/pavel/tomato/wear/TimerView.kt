@@ -6,4 +6,6 @@ interface TimerView {
     fun setPauseButtonVisibility(isVisible: Boolean)
     fun setResumeButtonVisibility(isVisible: Boolean)
     fun goToNavigationView()
+    fun disableEconomyMode()
+    fun enableEconomyMode()
 }

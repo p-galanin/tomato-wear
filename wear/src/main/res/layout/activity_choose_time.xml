@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_grey"
+    android:background="@color/power_economy_background"
     android:padding="@dimen/box_inset_layout_padding"
     tools:context=".ChooseTimeActivity"
     tools:deviceIds="wear">
@@ -19,7 +19,8 @@
         <Button
             android:id="@+id/btn_start_tomato"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#C2185B"
             android:text="TOMATO" />
 
         <ListView

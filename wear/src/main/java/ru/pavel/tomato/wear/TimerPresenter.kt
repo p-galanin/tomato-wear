@@ -1,7 +1,6 @@
 package ru.pavel.tomato.wear
 
 import android.text.format.DateFormat
-import ru.pavel.tomato.wear.timer.TimerListener
 
 interface TimerPresenter {
     fun onStart(timeInSeconds: Int)
@@ -11,17 +10,19 @@ interface TimerPresenter {
     fun onEveryTimerTick(secondsLeft: Int)
     fun onDestroy()
     fun onTimerFinish()
+    fun onEnableEconomyMode()
+    fun onDisableEconomyMode()
 }
 
 class TimerPresenterImpl(private val timerView: TimerView) : TimerPresenter{
 
     private val timerInteractor = TimerInteractor.create()
-    private val timerListener = BasicTimerListener(this)
+    private val timerListener = TimerStateListener(this)
 
     override fun onStart(timeInSeconds: Int) {
         timerInteractor.startOrResume(timeInSeconds, timerListener)
-        timerView.setPauseButtonVisibility(isVisible = true)
-        timerView.setResumeButtonVisibility(isVisible = false)
+        timerView.setTimerText(getTimeFormatted(timerInteractor.currentTimeLeft()))
+        setButtonsVisibility(timerInteractor.isTimerPaused())
     }
 
     override fun onCancelTimer() {
@@ -57,21 +58,30 @@ class TimerPresenterImpl(private val timerView: TimerView) : TimerPresenter{
         }
     }
 
+    override fun onEnableEconomyMode() {
+        timerView.enableEconomyMode()
+        timerInteractor.enableEconomyMode()
+    }
+
+    override fun onDisableEconomyMode() {
+        timerView.disableEconomyMode()
+        timerInteractor.disableEconomyMode()
+    }
+
     private fun setButtonsVisibility(isPaused: Boolean) {
         timerView.setPauseButtonVisibility(!isPaused)
         timerView.setResumeButtonVisibility(isPaused)
     }
 
-    private class BasicTimerListener(private val timerPresenter: TimerPresenter)
-        : TimerListener {
+    private class TimerStateListener(private val timerPresenter: TimerPresenter)
+        : TimerInteractor.TimerStateListener {
 
-        override fun onEveryTick(timeLeft: Int) {
-            timerPresenter.onEveryTimerTick(timeLeft)
+        override fun onChangeTime(timeInSeconds: Int) {
+            timerPresenter.onEveryTimerTick(timeInSeconds)
         }
 
         override fun onFinish() {
             timerPresenter.onTimerFinish()
         }
-
     }
 }

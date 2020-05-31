@@ -32,6 +32,12 @@ class TimerActivity : WearableActivity(), TimerView {
         super.onDestroy()
     }
 
+    override fun onEnterAmbient(ambientDetails: Bundle?) {
+        super.onEnterAmbient(ambientDetails)
+        timerPresenter.onEnableEconomyMode()
+        enableEconomyMode()
+    }
+
     override fun setTimerText(text: String) {
         runOnUiThread {
             tv_time_left.text = text
@@ -39,14 +45,19 @@ class TimerActivity : WearableActivity(), TimerView {
     }
 
     override fun signalOnComplete() {
-        val vibrator =
-            getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         val vibrationPattern = longArrayOf(0, 500, 50, 300)
         vibrator.vibrate(vibrationPattern, -1)
     }
 
     override fun setPauseButtonVisibility(isVisible: Boolean) {
         btn_pause_timer.visibility = setVisibility(isVisible)
+    }
+
+    override fun onExitAmbient() {
+        super.onExitAmbient()
+        timerPresenter.onDisableEconomyMode()
+        disableEconomyMode()
     }
 
     override fun setResumeButtonVisibility(isVisible: Boolean) {
@@ -56,6 +67,16 @@ class TimerActivity : WearableActivity(), TimerView {
     override fun goToNavigationView() {
         NavigationActivity.start(this)
         finish()
+    }
+
+    override fun enableEconomyMode() {
+        timer_container.setBackgroundColor(
+            resources.getColor(R.color.power_economy_background, theme))
+    }
+
+    override fun disableEconomyMode() {
+        timer_container.setBackgroundColor(
+            resources.getColor(R.color.basic_background, theme))
     }
 
     companion object {

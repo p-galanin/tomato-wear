@@ -2,7 +2,7 @@ package ru.pavel.tomato.wear.timer
 
 interface Timer {
 
-    fun start(durationSeconds: Int)
+    fun start(durationMls: Long)
     fun pause()
     fun resume()
     fun cancel()
@@ -10,6 +10,7 @@ interface Timer {
     fun stopListening(timerListener: TimerListener)
     fun isActive(): Boolean
     fun isPaused(): Boolean
+    fun timeLeft(): Long
 
     companion object {
         fun get() = TimerImpl
@@ -17,7 +18,7 @@ interface Timer {
 }
 
 interface TimerListener {
-    fun onEveryTick(timeLeft: Int) {}
+    fun onEveryTick(timeLeftMls: Long) {}
     fun onCancel() {}
     fun onFinish() {}
 }

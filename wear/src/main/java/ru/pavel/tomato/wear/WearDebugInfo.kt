@@ -16,5 +16,7 @@ package ru.pavel.tomato.wear
  - show millis?
  - precious ui
  - information when hidden?
+ - show real time?
+ - status on collapsed?
  - stats?
  */
